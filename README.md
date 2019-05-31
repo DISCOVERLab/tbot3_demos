@@ -12,29 +12,60 @@ A few simple demonstrations exploring the capabilities of the TurtleBot3 platfor
 
 ## Usage
 
+- Install the dependencies above
 - Clone this repo to `~/catkin_ws/src`
-- Set turtlebot model environment variable in `~/.bashrc`: `export TURTLEBOT3_MODEL="waffle_pi"`
+- Set turtlebot model environment variable in `~/.bashrc`: e.g. `export TURTLEBOT3_MODEL="waffle_pi"`
 - Follow the examples below
 
-## Simulation Examples
+## Startup
+
+### In Simulation
+
+Launch the turtlebot Gazebo simulation:
+
+`roslaunch turtlebot3_gazebo turtlebot3_world.launch`
+
+Alternatively, launch a simulation with a robot arm:
+
+`roslaunch open_manipulator_with_tb3_gazebo rooms.launch use_platform:=false paused:=false`
+
+See [the turtlebot manual](http://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/#turtlebot3-simulation-using-gazebo) for different possible worlds.
+
+### In Real Life
+
+Connect the Turtlebot and the RemotePC to the same wifi network. 
+
+Make sure ROS environment variables are set correctly in `~/.bashrc`
+
+[On the Turtlebot]
+```
+export ROS_MASTER_URI=http://REMOTE_IP:11311
+export ROS_HOSTNAME=TURTLE_IP
+```
+
+[On the RemotePC]
+```
+export ROS_MASTER_URI=http://REMOTE_IP:11311
+export ROS_HOSTNAME=REMOTE_IP
+```
+
+[On the RemotePC] Start ROS
+
+`roscore`
+
+[On the Turtlebot] Run packages with basic functionality
+
+`roslaunch turtlebot3_bringup turtlebot3_robot.launch`
+
+## Examples
 
 ### Basic Operation
-
-Launch the turtlebot Gazebo simulation in an empty world:
-
-`roslaunch turtlebot3_gazebo turtlebot3_empty_world.launch`
 
 Control the turtlebot by publishing to the `/cmd_vel` topic:
 
 `rosrun turtlebot3_teleop turtlebot3_teleop_key`
 
-See [the turtlebot manual](http://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/#turtlebot3-simulation-using-gazebo) for different possible worlds.
-
 ### Building a Map with SLAM 
-
-Launch the Gazebo simulation:
-
-`roslaunch turtlebot3_gazebo turtlebot3_world.launch`
 
 Launch SLAM (this opens RVIZ):
 
@@ -52,10 +83,6 @@ This saves two files, a pgm file and a yaml file, in the specified directory ("m
 
 ### Navigation in a Known Map
 
-Launch the Gazebo simulation:
-
-`roslaunch turtlebot3_gazebo turtlebot3_world.launch`
-
 Start the ROS navigation stack with the corresponding saved map file:
 
 `roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=$HOME/catkin_ws/src/tbot3_demos/maps/turtle_world_map.yaml`
@@ -63,10 +90,6 @@ Start the ROS navigation stack with the corresponding saved map file:
 Now use the RVIZ interface to set an initial pose estimate and send navigation goals. Note that this corresponds to publishing on `/initialpose` and `/move_base/goal`.
 
 ### Navigation with Unknown Map via SLAM
-
-Launch the Gazebo Simulation:
-
-`roslaunch turtlebot3_gazebo turtlebot3_world.launch`
 
 Launch SLAM and navigation jointly. This essentially replaces a static map from a file with a map that
 is updated in real-time from SLAM.
@@ -76,10 +99,6 @@ is updated in real-time from SLAM.
 Now use the RVIZ interface to set an initial pose estimate and send navigation goals.
 
 ### Using a Manipulator Arm
-
-Launch a Gazebo simulation that includes the robot arm:
-
-`roslaunch open_manipulator_with_tb3_gazebo empty_world.launch paused:=false`
 
 Start the robot arm controller:
 
@@ -91,12 +110,7 @@ Launch a GUI to send commands to the robot arm:
 
 Note that you need to press "start timer" first. 
 
-
 ### Pick-and-place with Known Map
-
-Launch Gazebo simulation:
-
-`roslaunch open_manipulator_with_tb3_gazebo rooms.launch use_platform:=false paused:=false`
 
 Launch navigation and moveit. Be sure to correct the map.yaml file provided in the open_manipulator_with_tb3_tools package first. 
 
