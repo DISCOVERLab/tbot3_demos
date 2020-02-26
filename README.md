@@ -100,15 +100,22 @@ Now use the RVIZ interface to set an initial pose estimate and send navigation g
 
 ### Using a Manipulator Arm
 
-Start the robot arm controller:
+[On the Turtlebot] Run the bringup packages, using `om_with_tb3` as a namespace. This is instead of `turtlebot3_robot.launch`.
 
-`roslaunch open_manipulator_controller open_manipulator_controller.launch use_platform:=false use_robot_name:=om_with_tb3`
+`ROS_NAMESPACE=om_with_tb3 roslaunch turtlebot3_bringup turtlebot3_robot.launch multi_robot_name:=om_with_tb3 set_lidar_frame_id:=om_with_tb3/base_scan`
 
-Launch a GUI to send commands to the robot arm:
+[On the Turlebot] Optionally, start the camera.
 
-`roslaunch open_manipulator_control_gui open_manipulator_control_gui.launch robot_name:=om_with_tb3`
+`ROS_NAMESPACE=om_with_tb3 roslaunch turtlebot3_bringup turtlebot3_rpicamera.launch`
 
-Note that you need to press "start timer" first. 
+[On the RemotePC] Start the robot state publisher
+
+`ROS_NAMESPACE=om_with_tb3 roslaunch open_manipulator_with_tb3_tools om_with_tb3_robot.launch`
+
+[On the RemotePC] Start MoveIt!
+
+`roslaunch open_manipulator_with_tb3_tools manipulation.launch use_platform:=true`
+
 
 ### Pick-and-place with Known Map
 
